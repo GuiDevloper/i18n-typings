@@ -1,0 +1,8 @@
+{
+  "name": "i18n-typings",
+  "version": "0.9.5",
+  "description": "Internationalize JSDoc inside Typescript typing files",
+  "main": "index.js",
+  "author": "GuiDevloper",
+  "license": "MIT"
+}
