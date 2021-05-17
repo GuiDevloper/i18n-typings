@@ -21,3 +21,5 @@ So, having a structure like mentioned, this can be ran:
 ```sh
 node index.js
 ```
+
+## [to-do](https://github.com/GuiDevloper/i18n-typings/issues/1)
