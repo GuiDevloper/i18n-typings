@@ -3,28 +3,28 @@
  */
 export declare type Page = {
   /**
-   * Título da página atual
+   * Current page title
    * 
-   * https://nullstack.app/pt-br/contexto-page
+   * https://nullstack.app/context-page
    * 
    */
   title: string,
 
-  /** Descrição da página atual
+  /** Current page description
    * 
-   * https://nullstack.app/pt-br/contexto-page
+   * https://nullstack.app/context-page
    */
   description: string,
 
   /**
-   * Locale configurado da página atual
+   * Current page locale
    *
-   * https://nullstack.app/pt-br/contexto-page
+   * https://nullstack.app/context-page
    */
   locale: string
 };
 
 /**
- * constante page exportado
+ * exported page constant
  */
 export declare const page: Page;

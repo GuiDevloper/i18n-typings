@@ -2,10 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const Utils = {};
 
-Utils.getI18n = function() {
-  let lang = Intl.DateTimeFormat()
+Utils.getLang = function() {
+  return Intl.DateTimeFormat()
     .resolvedOptions()
     .locale;
+}
+
+Utils.getI18n = function() {
+  let lang = Utils.getLang();
   const langs = fs
     .readdirSync(path.join(process.cwd(), 'tests/locales'))
     .filter(l => l[2] === '-')
@@ -31,8 +35,9 @@ Utils.toArray = function(obj) {
 
 Utils.warnQuantity = function(i18n, srcComments) {
   if (i18n.length !== srcComments.length) {
-    console.error('Quantidade de comentários salvos é diferente do código!');
-    console.error(`Salvos: ${i18n.length}, No código: ${srcComments.length}`);
+    const Messages = require('./messages');
+    console.error(Messages.warnQuantity);
+    console.error(Messages.logQuantityDiff(i18n, srcComments));
     return true;
   }
 }

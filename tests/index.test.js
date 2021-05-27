@@ -1,6 +1,7 @@
 const mock = require('mock-fs');
-const fs = require('fs')
+const fs = require('fs');
 const path = require('path');
+const Messages = require('../src/messages');
 
 function getFile(name) {
   return fs.readFileSync(path.join(__dirname, name), 'utf8');
@@ -39,9 +40,7 @@ describe('Run()', () => {
     const consoleErr = jest.spyOn(console, 'error').mockImplementation();
     mockIntl('en-GB');
     newRun();
-    expect(consoleErr).toBeCalledWith(
-      'Quantidade de comentários salvos é diferente do código!'
-    );
+    expect(consoleErr).toBeCalledWith(Messages.warnQuantity);
   });
 
   it('should warning if unknown i18n', () => {
@@ -49,7 +48,12 @@ describe('Run()', () => {
     mock({
       'index.js': mock.load(path.join(__dirname, '../index.js')),
       'src': {
+        'locales': {
+          'pt-BR.js': mock.load(path.join(__dirname, '../src/locales/pt-BR.js')),
+          'en-US.js': mock.load(path.join(__dirname, '../src/locales/en-US.js')),
+        },
         'utils.js': mock.load(path.join(__dirname, '../src/utils.js')),
+        'messages.js': mock.load(path.join(__dirname, '../src/messages.js')),
       },
       'tests': {
         'index.d.ts': mock.load('./tests/index.d.ts'),
@@ -58,7 +62,7 @@ describe('Run()', () => {
     });
 
     newRun();
-    expect(consoleErr).toBeCalledWith('Wait, i18n data not found!');
+    expect(consoleErr).toBeCalledWith(Messages.noI18nFound);
   });
 
 });

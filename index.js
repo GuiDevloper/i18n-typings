@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 const fs = require('fs');
 const Utils = require('./src/utils');
+const Messages = require('./src/messages');
 
 function Run() {
   try {
@@ -12,7 +13,7 @@ function Run() {
       fs.writeFileSync('./tests/index.d.ts', fixedSrc);
     }
   } catch {
-    console.error('Wait, i18n data not found!');
+    console.error(Messages.noI18nFound);
   }
 }
 Run();
