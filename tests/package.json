@@ -1,0 +1,6 @@
+{
+  "name": "typings-example",
+  "main": "index.js",
+  "typings": "./index.d.ts",
+  "types-i18n": "./locales"
+}
