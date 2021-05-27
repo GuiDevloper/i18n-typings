@@ -8,18 +8,14 @@ While working at [Nullstack](https://github.com/nullstack/nullstack) typings fil
 
 And, why wouldn't it be internationalized?
 
-## Use
+## Current Specification
 
 The [tests](https://github.com/GuiDevloper/i18n-typings/tree/master/tests) folder is where all examples happens.
 
-In [locales](https://github.com/GuiDevloper/i18n-typings/tree/master/tests/locales) folder all i18n files are stored (all `.js` for limitless possibilities purpose) they are read and it's data injected in corresponding keys commented in the `source.d.ts`, creating localized versions (i.e `index-BR.d.ts`).
+In [locales](https://github.com/GuiDevloper/i18n-typings/tree/master/tests/locales) folder all i18n files are stored (all `.js` for limitless possibilities purpose).
 
-If the key in a i18n file is an `object`, children keys are searched (e.g `Page.Page.title`).
+They are read in order as one Array of strings and it's data injected in corresponding comments in the `index.d.ts`, replacing them by a localized version.
 
-So, having a structure like mentioned, this can be ran:
-
-```sh
-node index.js
-```
+If the quantity of comments in the typing file is different from the i18n, an warning is throw.
 
 ## [to-do](https://github.com/GuiDevloper/i18n-typings/issues/1)
