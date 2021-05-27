@@ -1,20 +1,10 @@
-const { getLink } = require('./shared');
-
-const pageLink = getLink('context-page');
-
 const typePage = {
-  NAME: `/**
-  * type Page
-  */`,
   title: `
     Current page title
-    ${pageLink}
   `,
-  description: `Current page description\n
-    ${pageLink}`,
+  description: `Current page description\n`,
   locale: `/**
   * Current page locale\n  *
-  * ${pageLink}
   */`
 }
 
