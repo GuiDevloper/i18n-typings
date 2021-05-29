@@ -2,23 +2,28 @@ const fs = require('fs');
 const path = require('path');
 const Utils = {};
 
+Utils.newMessages = function() {
+  return require('../src/messages');
+}
+
 Utils.getLang = function() {
   return Intl.DateTimeFormat()
     .resolvedOptions()
     .locale;
 }
 
-Utils.getI18n = function() {
+Utils.getI18n = function(basePath = process.cwd()) {
   let lang = Utils.getLang();
   const langs = fs
-    .readdirSync(path.join(process.cwd(), 'tests/locales'))
+    .readdirSync(path.join(basePath, 'locales'))
     .filter(l => l[2] === '-')
     .map(f => f.replace('.js', ''));
 
   lang = langs.indexOf(lang) > -1
     ? lang
     : 'en-US';
-  return require(path.join(process.cwd(), `tests/locales/${lang}.js`));
+
+  return require(path.join(basePath, `locales/${lang}.js`));
 }
 
 Utils.toArray = function(obj) {
@@ -35,7 +40,7 @@ Utils.toArray = function(obj) {
 
 Utils.warnQuantity = function(i18n, srcComments) {
   if (i18n.length !== srcComments.length) {
-    const Messages = require('./messages');
+    const Messages = Utils.newMessages();
     console.error(Messages.warnQuantity);
     console.error(Messages.logQuantityDiff(i18n, srcComments));
     return true;

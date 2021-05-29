@@ -1,21 +1,24 @@
 #! /usr/bin/env node
 const fs = require('fs');
+const path = require('path');
 const Utils = require('./src/utils');
 const Messages = require('./src/messages');
 
-function Run() {
+function Run(basePath = process.cwd(), localesDir) {
+  localesDir = localesDir || basePath;
   try {
-    const source = fs.readFileSync('./tests/index.d.ts', 'utf8');
-    let i18n = Utils.getI18n();
+    const file = 'index.d.ts';
+    const mainTyping = path.join(basePath, file);
+    const source = fs.readFileSync(mainTyping, 'utf8');
+    let i18n = Utils.getI18n(localesDir);
     i18n = Utils.toArray(i18n);
     let fixedSrc = Utils.fixFile(source, i18n);
     if (fixedSrc) {
-      fs.writeFileSync('./tests/index.d.ts', fixedSrc);
+      fs.writeFileSync(mainTyping, fixedSrc);
     }
   } catch {
     console.error(Messages.noI18nFound);
   }
 }
-Run();
 
 module.exports = Run;
