@@ -9,6 +9,10 @@ module.exports = {
   generatedComments: 'Comentários transformados com sucesso!',
   version: 'Ei, veja minha versão: ',
   unknownCommand: 'Eita, digite um comando que eu conheça!',
+  noLocalesFound: 'Diretório contendo pasta "locales" não encontrado!',
+  notRecognizedLang: 'Idioma não reconhecido! Formato: "en-US"',
+  localeFileExistent: lang => `Arquivo já existente em "locales/${lang}.js"!`,
+  createdi18nFile: lang => `Criado com sucesso em "locales/${lang}.js"`,
   help:
   `  Help.. I want somebody! Help.. ♪
   Opa, tudo bem? Veja como me chamar:
@@ -20,6 +24,7 @@ module.exports = {
   -v                     Mostra minha versão instalada
   --locales "./my-path"  Usa arquivos i18n customizados de um caminho contendo uma pasta "locales"
   --restore              Restaura arquivos do backup anteriormente salvo em "i18n-ts-backup"
+  --create en-US         Cria arquivo i18n dos comentários do código do diretório atual
 
   Leia mais no README, te vejo depois!`
 }

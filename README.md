@@ -41,6 +41,10 @@ i18n-types --locale "./my-path"
 
 # restore backup files previously saved in "i18n-ts-backup"
 i18n-types --restore
+
+# create i18n file from comments in the current dir code
+# you can specify the lang you going to contribute (default: en-US)
+i18n-types --create <lang>
 ```
 
 ## [to-do](https://github.com/GuiDevloper/i18n-typings/issues/1)
