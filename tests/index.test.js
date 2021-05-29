@@ -4,7 +4,8 @@ const path = require('path');
 const Utils = require('../src/utils');
 
 function getFile(name) {
-  return fs.readFileSync(path.join(__dirname, name), 'utf8');
+  return fs.readFileSync(path.join(__dirname, name), 'utf8')
+    .replace(/\s/g, '');
 }
 
 function mockIntl(locale) {
@@ -13,8 +14,9 @@ function mockIntl(locale) {
   }));
 }
 
-function mockLoad(file) {
-  return mock.load(path.join(__dirname, '../', file));
+function renameExt(old, ext) {
+  const localePath = './tests/locales/en-US.';
+  fs.renameSync(localePath + old, localePath + ext);
 }
 
 describe('Run()', () => {
@@ -49,24 +51,11 @@ describe('Run()', () => {
 
   it('should warning if unknown i18n', () => {
     const consoleErr = jest.spyOn(console, 'error').mockImplementation();
-    mock({
-      'index.js': mockLoad('index.js'),
-      'src': {
-        'locales': {
-          'pt-BR.js': mockLoad('src/locales/pt-BR.js'),
-          'en-US.js': mockLoad('src/locales/en-US.js'),
-        },
-        'utils.js': mockLoad('src/utils.js'),
-        'messages.js': mockLoad('src/messages.js'),
-      },
-      'tests': {
-        'index.d.ts': mockLoad('./tests/index.d.ts'),
-        locales: {}
-      }
-    });
-
+    mockIntl('en-US');
+    renameExt('js', 'sj');
     newRun();
     expect(consoleErr).toBeCalledWith(Utils.newMessages().noI18nFound);
+    renameExt('sj', 'js');
   });
 
 });
