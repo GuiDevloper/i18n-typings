@@ -112,4 +112,36 @@ Utils.fixFile = function(src, i18n) {
   return src;
 }
 
+function getBackupPath(basePath, file = '') {
+  return path.join(basePath, `i18n-ts-backup/${file}`);
+}
+
+Utils.saveBackup = function(basePath, file, source) {
+  const backupPath = getBackupPath(basePath, `bkp.${file}`);
+  if (!fs.existsSync(backupPath)) {
+    if (!fs.existsSync(getBackupPath(basePath))) {
+      fs.mkdirSync(getBackupPath(basePath));
+    }
+    fs.writeFileSync(backupPath, source);
+  }
+}
+
+Utils.restoreBackup = function(basePath) {
+  const Messages = Utils.newMessages();
+  const backupPath = path.join(basePath, 'i18n-ts-backup');
+  const files = fs.readdirSync(backupPath);
+  if (files.length > 0) {
+    files.forEach(fName => {
+      const bkpFilePath = path.join(backupPath, fName);
+      fs.writeFileSync(
+        path.join(basePath, fName.replace('bkp.', '')),
+        fs.readFileSync(bkpFilePath, 'utf8')
+      );
+    });
+    console.log(Messages.restoredBackup)
+  } else {
+    console.error(Messages.noBackupFiles);
+  }
+}
+
 module.exports = Utils;
