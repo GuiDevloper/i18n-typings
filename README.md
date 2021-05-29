@@ -2,6 +2,8 @@
 
 > Internationalize JSDoc inside Typescript typing files
 
+[![e2e Tests](https://github.com/GuiDevloper/i18n-typings/actions/workflows/main.yml/badge.svg)](https://github.com/GuiDevloper/i18n-typings/actions/workflows/main.yml)
+
 ## Purpose
 
 While working at [Nullstack](https://github.com/nullstack/nullstack) typings file, the view of VSCode supporting almost instantly any JSDocs typed appeared as a perfect opportunity to seamlessly and minimalistically bring the docs to devs.
