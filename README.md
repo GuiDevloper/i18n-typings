@@ -20,4 +20,20 @@ They are read in order as one Array of strings and it's data injected in corresp
 
 If the quantity of comments in the typing file is different from the i18n, an warning is throw.
 
+## CLI Usage
+
+i18n-types can understand a series of commands, which currently are:
+
+```sh
+npx i18n-types -v # shows installed version
+npx i18n-types help # shows help information
+
+# use custom i18n files from a path containing a "locales" folder
+# replacing/adding to ones at target package (e.g "i18n-typings")
+npx i18n-types --locale "./my-path"
+
+# restore backup files previously saved in "i18n-ts-backup"
+npx i18n-types --restore
+```
+
 ## [to-do](https://github.com/GuiDevloper/i18n-typings/issues/1)
