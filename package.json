@@ -8,6 +8,9 @@
   "repository": {
     "url": "https://github.com/GuiDevloper/i18n-typings"
   },
+  "bin": {
+    "i18n-types": "./index.js"
+  },
   "keywords": [
     "i18n",
     "typescript",
