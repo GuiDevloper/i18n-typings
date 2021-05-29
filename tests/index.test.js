@@ -1,20 +1,27 @@
 const mock = require('mock-fs');
 const fs = require('fs');
 const path = require('path');
-const Messages = require('../src/messages');
 
 function getFile(name) {
   return fs.readFileSync(path.join(__dirname, name), 'utf8');
 }
 
 function mockIntl(locale) {
-  Intl.DateTimeFormat = () => ({
+  jest.spyOn(Intl, 'DateTimeFormat').mockImplementation(() => ({
     resolvedOptions: () => ({ locale })
-  });
+  }));
+}
+
+function newMessages() {
+  return require('../src/messages');
+}
+
+function mockLoad(file) {
+  return mock.load(path.join(__dirname, file));
 }
 
 describe('Run()', () => {
-  
+
   function newRun() {
     const Run = require('../index.js');
     Run();
@@ -33,36 +40,36 @@ describe('Run()', () => {
     newRun();
     const result = getFile('index.d.ts');
     const expected = getFile('expected/index.US.d.ts');
-    expect(result).toBe(expected)
+    expect(result).toBe(expected);
   });
 
   it('should warning if i18n quantity different from code', () => {
     const consoleErr = jest.spyOn(console, 'error').mockImplementation();
     mockIntl('en-GB');
     newRun();
-    expect(consoleErr).toBeCalledWith(Messages.warnQuantity);
+    expect(consoleErr).toBeCalledWith(newMessages().warnQuantity);
   });
 
   it('should warning if unknown i18n', () => {
     const consoleErr = jest.spyOn(console, 'error').mockImplementation();
     mock({
-      'index.js': mock.load(path.join(__dirname, '../index.js')),
+      'index.js': mockLoad('../index.js'),
       'src': {
         'locales': {
-          'pt-BR.js': mock.load(path.join(__dirname, '../src/locales/pt-BR.js')),
-          'en-US.js': mock.load(path.join(__dirname, '../src/locales/en-US.js')),
+          'pt-BR.js': mockLoad('../src/locales/pt-BR.js'),
+          'en-US.js': mockLoad('../src/locales/en-US.js'),
         },
-        'utils.js': mock.load(path.join(__dirname, '../src/utils.js')),
-        'messages.js': mock.load(path.join(__dirname, '../src/messages.js')),
+        'utils.js': mockLoad('../src/utils.js'),
+        'messages.js': mockLoad('../src/messages.js'),
       },
       'tests': {
-        'index.d.ts': mock.load('./tests/index.d.ts'),
+        'index.d.ts': mockLoad('./index.d.ts'),
         locales: {}
       }
     });
 
     newRun();
-    expect(consoleErr).toBeCalledWith(Messages.noI18nFound);
+    expect(consoleErr).toBeCalledWith(newMessages().noI18nFound);
   });
 
 });
