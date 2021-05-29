@@ -13,17 +13,21 @@ Utils.getLang = function() {
 }
 
 Utils.getI18n = function(basePath = process.cwd()) {
-  let lang = Utils.getLang();
-  const langs = fs
-    .readdirSync(path.join(basePath, 'locales'))
-    .filter(l => l[2] === '-')
-    .map(f => f.replace('.js', ''));
+  try {
+    let lang = Utils.getLang();
+    const langs = fs
+      .readdirSync(path.join(basePath, 'locales'))
+      .filter(l => l[2] === '-')
+      .map(f => f.replace('.js', ''));
 
-  lang = langs.indexOf(lang) > -1
-    ? lang
-    : 'en-US';
+    lang = langs.indexOf(lang) > -1
+      ? lang
+      : 'en-US';
 
-  return require(path.join(basePath, `locales/${lang}.js`));
+    return require(path.join(basePath, `locales/${lang}.js`));
+  } catch {
+    console.error(Utils.newMessages().noI18nFound);
+  }
 }
 
 Utils.toArray = function(obj) {
@@ -135,13 +139,45 @@ Utils.restoreBackup = function(basePath) {
       const bkpFilePath = path.join(backupPath, fName);
       fs.writeFileSync(
         path.join(basePath, fName.replace('bkp.', '')),
-        fs.readFileSync(bkpFilePath, 'utf8')
+        Utils.getFileContent(bkpFilePath)
       );
     });
     console.log(Messages.restoredBackup)
   } else {
     console.error(Messages.noBackupFiles);
   }
+}
+
+Utils.getFileContent = function(basePath, file = '') {
+  const mainTyping = path.join(basePath, file);
+  return fs.readFileSync(mainTyping, 'utf8');
+}
+
+Utils.langRegex = new RegExp(/(^[a-z]{2}[-]{1}[A-Z]{2}$)/);
+
+Utils.createI18n = function(lang) {
+  const Messages = Utils.newMessages();
+  const mainTyping = Utils.getFileContent(process.cwd(), 'index.d.ts');
+  let comments = mainTyping.match(Utils.commentsRegex);
+  if (lang) {
+    if (!lang.match(Utils.langRegex)) {
+      return console.error(Messages.notRecognizedLang);
+    }
+  } else {
+    lang = 'en-US';
+  }
+  const localesPath = path.join(process.cwd(), 'locales');
+  const createdFile = path.join(localesPath, `${lang}.js`);
+  if (!fs.existsSync(localesPath)) {
+    fs.mkdirSync(localesPath);
+  }
+  if (fs.existsSync(createdFile)) {
+    return console.error(Messages.localeFileExistent(lang));
+  }
+  comments = `[\n\`${comments.join('\`,\n\`')}\`\n]`;
+  comments = comments.replace(/\n.* \*/g, '\n  *');
+  fs.writeFileSync(createdFile, `module.exports = ${comments};`);
+  console.log();
 }
 
 module.exports = Utils;

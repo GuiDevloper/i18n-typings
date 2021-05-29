@@ -10,7 +10,7 @@ function Run(basePath = process.cwd(), localesDir) {
   try {
     const file = 'index.d.ts';
     const mainTyping = path.join(basePath, file);
-    const source = fs.readFileSync(mainTyping, 'utf8');
+    const source = Utils.getFileContent(mainTyping);
     let i18n = Utils.getI18n(localesDir);
     i18n = Utils.toArray(i18n);
     let fixedSrc = Utils.fixFile(source, i18n);
@@ -31,6 +31,7 @@ function logDone() {
 if (process.env.NODE_ENV !== 'test') {
   const getPath = (dir) => path.join(process.cwd(), dir)
   const getIdx = (arg) => args.indexOf(arg);
+  const getValue = (arg) => args[getIdx(arg) + 1];
   const simpleArg = {
     'help': Messages.help,
     '-v': Messages.version + require('./package.json').version
@@ -38,16 +39,23 @@ if (process.env.NODE_ENV !== 'test') {
 
   const argsFns = {
     '--locales': () => {
-      const locales = args[getIdx('--locales') + 1];
+      const locales = getValue('--locales');
+      const localesExist = fs.existsSync(getPath(locales + '/locales'));
+      if (!localesExist) {
+        return console.error(Messages.noLocalesFound);
+      }
       Run(undefined, getPath(locales)) && logDone();
     },
-    '--restore': () => Utils.restoreBackup(getPath(''))
+    '--restore': () => Utils.restoreBackup(getPath('')),
+    '--create': () =>  Utils.createI18n(getValue('--create'))
   };
 
   if (simpleArg) {
     console.log(simpleArg);
-  } else if (getIdx('--locales') > -1) {
+  } else if (getIdx('--locales') > -1 && getValue('--locales')) {
     argsFns['--locales']();
+  } else if (getIdx('--create') > -1) {
+    argsFns['--create']();
   } else if (getIdx('--restore') > -1) {
     argsFns['--restore']();
   } else if (args.length > 0) {
