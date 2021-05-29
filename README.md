@@ -22,18 +22,25 @@ If the quantity of comments in the typing file is different from the i18n, an wa
 
 ## CLI Usage
 
-i18n-types can understand a series of commands, which currently are:
+```sh
+# install globally using npm
+npm install i18n-typings -g
+# or yarn
+yarn global add i18n-typings
+```
+
+i18n-types CLI can understand a series of commands, which currently are:
 
 ```sh
-npx i18n-types -v # shows installed version
-npx i18n-types help # shows help information
+i18n-types -v # shows installed version
+i18n-types help # shows help information
 
 # use custom i18n files from a path containing a "locales" folder
 # replacing/adding to ones at target package (e.g "i18n-typings")
-npx i18n-types --locale "./my-path"
+i18n-types --locale "./my-path"
 
 # restore backup files previously saved in "i18n-ts-backup"
-npx i18n-types --restore
+i18n-types --restore
 ```
 
 ## [to-do](https://github.com/GuiDevloper/i18n-typings/issues/1)

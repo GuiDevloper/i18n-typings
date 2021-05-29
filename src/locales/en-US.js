@@ -8,7 +8,7 @@ module.exports = {
   restoredBackup: 'Restored backup!',
   generatedComments: 'Successfully transformed comments!',
   version: 'Hey, take a look at my version: ',
-  unknown: 'Ops, type a command I know!',
+  unknownCommand: 'Ops, type a command I know!',
   help:
   `  Help.. I want somebody! Help.. ♪
   Hey, alright there? See how to call me:
@@ -17,7 +17,9 @@ module.exports = {
 
   Flags:
 
-  -v                        Shows my installed version
+  -v                     Shows my installed version
+  --locales "./my-path"  Use custom i18n files from a path containing a "locales" folder
+  --restore              Restore backup files previously saved in "i18n-ts-backup"
 
-  See you later!`
+  Read more on README, see you later!`
 }
