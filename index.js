@@ -17,22 +17,43 @@ function Run(basePath = process.cwd(), localesDir) {
     if (fixedSrc) {
       Utils.saveBackup(basePath, file, source);
       fs.writeFileSync(mainTyping, fixedSrc);
+      return true;
     }
   } catch {
     console.error(Messages.noI18nFound);
   }
 }
 
+function logDone() {
+  console.log(Messages.generatedComments);
+}
+
 if (process.env.NODE_ENV !== 'test') {
   const getPath = (dir) => path.join(process.cwd(), dir)
   const getIdx = (arg) => args.indexOf(arg);
-  if (getIdx('--locales') > -1) {
-    const locales = args[getIdx('--locales') + 1];
-    Run(undefined, getPath(locales));
+  const simpleArg = {
+    'help': Messages.help,
+    '-v': Messages.version + require('./package.json').version
+  }[args[0]];
+
+  const argsFns = {
+    '--locales': () => {
+      const locales = args[getIdx('--locales') + 1];
+      Run(undefined, getPath(locales)) && logDone();
+    },
+    '--restore': () => Utils.restoreBackup(getPath(''))
+  };
+
+  if (simpleArg) {
+    console.log(simpleArg);
+  } else if (getIdx('--locales') > -1) {
+    argsFns['--locales']();
   } else if (getIdx('--restore') > -1) {
-    Utils.restoreBackup(getPath(''));
+    argsFns['--restore']();
+  } else if (args.length > 0) {
+    console.log(Messages.unknownCommand);
   } else {
-    Run();
+    Run() && logDone();
   }
 }
 
